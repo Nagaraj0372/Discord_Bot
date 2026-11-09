@@ -14,6 +14,7 @@ model Guild {
   updatedAt     DateTime          @updatedAt
   settings      GuildSettings?
   users         User[]
+  transactions  Transaction[]
   cases         ModerationCase[]
   warnings      Warning[]
   tickets       Ticket[]
@@ -49,6 +50,8 @@ model User {
   economy   EconomyAccount?
   level     Level?
   inventory InventoryItem[]
+  transactions Transaction[]
+  xpEvents XPEvent[]
   createdAt DateTime         @default(now())
 
   @@unique([guildId, userId])
@@ -122,6 +125,8 @@ model Transaction {
   type      String
   metadata  Json?
   createdAt DateTime @default(now())
+  guild     Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([guildId, userId, createdAt])
 }
@@ -172,6 +177,7 @@ model XPEvent {
   source    String
   createdAt DateTime @default(now())
   guild     Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([guildId, userId, createdAt])
 }

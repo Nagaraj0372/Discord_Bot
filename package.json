@@ -4,7 +4,9 @@
   "private": true,
   "description": "Production-ready all-in-one Discord bot for gaming, coding, cybersecurity and community servers.",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
@@ -22,7 +24,9 @@
     "@discordjs/builders": "^1.13.0",
     "@prisma/client": "^6.17.1",
     "discord.js": "^14.24.2",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
+    "prisma": "^6.17.1",
     "pino": "^10.1.0",
     "pino-http": "^11.0.0",
     "riffy": "^1.0.12",
@@ -34,9 +38,14 @@
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "eslint": "^9.38.0",
-    "prisma": "^6.17.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
+  },
+  "allowScripts": {
+    "@prisma/client@6.19.3": true,
+    "prisma@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.28.2": true
   }
 }
