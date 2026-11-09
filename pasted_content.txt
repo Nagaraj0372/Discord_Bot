@@ -1,0 +1,298 @@
+You are a senior full-stack engineer, Discord bot architect, database engineer and DevOps engineer.
+
+YOUR TASK:
+Build a complete, production-ready Discord bot named GOKUL BOT. Do not just explain how to build it. Actually create the complete project, implement the features, test the application and prepare deployment configurations.
+
+REFERENCE PROJECTS:
+1. https://github.com/Sobble2546/RTX-MUSIC-BOT-v3.6
+2. https://github.com/codebymitch/TitanBot
+
+FIRST STUDY BOTH REPOSITORIES:
+- Inspect their source code, folder structures, dependencies, commands, events, music implementation and database patterns.
+- Use them as inspiration for functionality and architecture.
+- Do not blindly copy their code.
+- Respect repository licenses and attribution.
+- Build an original implementation with maintainable architecture.
+
+PROJECT IDENTITY:
+Name: GOKUL BOT
+Purpose: All-in-one Discord bot for gaming, coding, cybersecurity and community servers.
+Primary interface: Discord slash commands.
+No dashboard. No separate web frontend required.
+
+TECH STACK:
+- Node.js 22 LTS
+- TypeScript
+- Discord.js v14
+- PostgreSQL
+- Prisma ORM
+- Lavalink v4
+- Riffy music library
+- Express.js for health checks and secured API
+- Zod validation
+- Pino logging
+- Vitest testing
+- Docker
+
+FEATURES:
+
+1. MUSIC SYSTEM
+/play, /pause, /resume, /skip, /stop, /leave, /queue, /nowplaying, /volume, /shuffle, /loop, /seek.
+/ Interactive music player with buttons.
+/ Per-guild queues.
+/ Track information and requester.
+/ Lavalink reconnection and failure recovery.
+/ Clear error messages.
+/ Support authorized audio sources only.
+/ No fake playback or hardcoded unreliable public Lavalink servers.
+
+2. MODERATION
+/ban, /kick, /timeout, /untimeout, /warn, /warnings, /purge, /lock, /unlock, /slowmode.
+/ Moderation cases.
+/ Staff-only commands.
+/ Audit logs.
+/ Role hierarchy checks.
+/ Confirmation for destructive actions.
+
+3. SERVER MANAGEMENT
+/autorole, /welcome, /goodbye, /reactionrole, /serverconfig.
+/ Custom welcome embeds.
+/ Member join and leave tracking.
+/ Server settings stored in PostgreSQL.
+
+4. COMMUNITY
+/level, /rank, /leaderboard.
+/ XP and leveling.
+/ Member profiles.
+/ Automatic role rewards.
+/ Anti-spam and cooldowns.
+
+5. TICKETS
+/ticket setup, /ticket create, /ticket claim, /ticket close.
+/ Staff-only ticket channels.
+/ Transcript generation.
+/ Ticket priority.
+/ User privacy and permission checks.
+
+6. ECONOMY
+/balance, /daily, /work, /shop, /inventory, /leaderboard.
+/ Wallet and bank.
+/ Transactions.
+/ Anti-abuse and transaction safety.
+/ Persistent PostgreSQL storage.
+
+7. GIVEAWAYS
+/giveaway create, /giveaway end, /giveaway reroll.
+/ Multiple winners.
+/ Persistent giveaway state.
+
+8. GAMING
+Minecraft server status commands.
+/ VALORANT-related community utilities where supported.
+/ Gaming role selection.
+/ Game event announcements.
+/ Gaming community utilities.
+
+9. AI INTEGRATION
+Optional connection to my existing Hermes Agent API.
+/ Hermes connects to my local Ollama model.
+/ Discord AI chat command.
+/ API key authentication.
+/ Configurable AI permissions.
+/ Per-guild AI enable/disable.
+/ Never expose my local Ollama port publicly.
+/ AI integration must be optional and must not prevent the normal bot from starting.
+
+10. UTILITIES
+/help, /ping, /uptime, /botinfo, /userinfo, /serverinfo, /avatar, /report.
+
+DATABASE DESIGN:
+Use PostgreSQL and Prisma.
+Implement proper relational schemas for:
+- Guilds
+- GuildSettings
+- Users
+- ModerationCases
+- Warnings
+- Tickets
+- TicketTranscripts
+- EconomyAccounts
+- Transactions
+- Inventory
+- Giveaways
+- Levels
+- XPEvents
+- ReactionRoles
+- MusicPreferences
+- AISettings
+
+Requirements:
+- Database migrations.
+- Foreign keys and indexes.
+- Transactions.
+- Guild-specific data isolation.
+- Persistent data after restarts.
+- Proper database error handling.
+- No in-memory database as primary storage.
+
+PROJECT ARCHITECTURE:
+Create modular TypeScript architecture.
+Separate:
+- src/commands
+- src/events
+- src/services
+- src/database
+- src/music
+- src/middleware
+- src/api
+- src/config
+- src/utils
+- src/types
+- src/jobs
+- tests
+
+Implement:
+- Centralized error handling.
+- Permission validation.
+- Slash command registration.
+- Structured logging.
+- Graceful shutdown.
+- Reconnection handling.
+- Rate limiting.
+- Command cooldowns.
+- Input validation.
+- Safe background jobs.
+- Idempotent scheduled tasks.
+
+DEPLOYMENT:
+The bot must support both Railway and Render.
+
+RAILWAY:
+- Persistent bot worker.
+- Railway PostgreSQL.
+- DATABASE_URL environment variable.
+- Railway configuration file.
+- Appropriate health monitoring.
+- One active bot instance.
+- Automatic restart configuration.
+
+RENDER:
+- Render Background Worker.
+- Render PostgreSQL.
+- render.yaml.
+- Build and start commands.
+- Migration execution.
+- Health monitoring where appropriate.
+
+LOCAL DEVELOPMENT:
+Provide:
+- Dockerfile.
+- docker-compose.yml.
+- .env.example.
+- Prisma migration scripts.
+- Windows PowerShell setup commands.
+- Local PostgreSQL setup.
+- Local Lavalink setup instructions.
+- Development and production start scripts.
+
+ENVIRONMENT VARIABLES:
+DISCORD_TOKEN
+CLIENT_ID
+GUILD_ID
+DATABASE_URL
+LAVALINK_HOST
+LAVALINK_PORT
+LAVALINK_PASSWORD
+LAVALINK_SECURE
+HERMES_API_URL
+HERMES_API_KEY
+LOG_LEVEL
+NODE_ENV
+PORT
+
+SECURITY:
+- Never commit secrets.
+- Never print tokens in logs.
+- Never expose database credentials.
+- Never give Administrator permission unnecessarily.
+- Enforce role hierarchy.
+- Protect API endpoints.
+- Validate every user interaction.
+- Prevent spam and command abuse.
+- Prevent economy exploits.
+- Protect ticket privacy.
+- Add appropriate rate limits.
+
+QUALITY REQUIREMENTS:
+- No empty command handlers.
+- No fake implementations.
+- No TODO-only features.
+- No broken imports.
+- No missing dependencies.
+- No hardcoded secrets.
+- Every registered command must work.
+- Every database model must have a valid migration.
+- Handle Discord API failures.
+- Handle Lavalink disconnections.
+- Handle PostgreSQL failures.
+- Make all features configurable.
+
+TESTING:
+- Install dependencies.
+- Generate Prisma client.
+- Run database migrations.
+- Run TypeScript checks.
+- Run ESLint.
+- Run unit tests.
+- Run integration tests where possible.
+- Run production build.
+- Fix all errors before reporting completion.
+
+DOCUMENTATION:
+Create a detailed README.md containing:
+- Project overview.
+- Features.
+- Architecture.
+- Folder structure.
+- Requirements.
+- Windows setup.
+- Environment variables.
+- Discord Developer Portal setup.
+- Bot invitation and permissions.
+- Database setup.
+- Lavalink setup.
+- Railway deployment.
+- Render deployment.
+- Troubleshooting.
+- Commands reference.
+
+EXECUTION INSTRUCTIONS:
+You have permission to inspect the current workspace and create/edit project files.
+Start by inspecting the current working directory.
+If it is empty, create the project.
+If an existing project is present, inspect it before making changes.
+Read the two reference repositories before implementing when network access is available.
+Do not overwrite unrelated files.
+Make reasonable technical decisions without repeatedly asking me questions.
+Never expose or request my secret tokens in chat.
+
+MOST IMPORTANT:
+Do not give me a phased tutorial.
+Do not stop after architecture.
+Do not stop after creating the folder structure.
+Do not only give code snippets.
+Do not ask me to approve each feature.
+Implement the entire application in the workspace, install compatible dependencies, run checks, fix errors and prepare the complete deployment-ready project.
+
+At completion, report:
+1. What was implemented.
+2. Complete folder structure.
+3. Commands available.
+4. Database setup.
+5. Required environment variables.
+6. Exact Windows PowerShell commands to run locally.
+7. Exact Railway deployment steps.
+8. Exact Render deployment steps.
+9. Remaining external configuration that requires my credentials or manual authorization.
+
+Begin implementation now.

@@ -1,0 +1,3 @@
+import { PrismaClient } from '@prisma/client'; import { logger } from '../utils/logger.js'; export const prisma = new PrismaClient({ log: [{emit:'event',level:'error'}] }); prisma.$on('error', e => logger.error({err:e}, 'database error'));
+export async function ensureGuild(discordId:string){ return prisma.guild.upsert({where:{discordId},create:{discordId,settings:{create:{}}},update:{}}); }
+export async function ensureUser(guildId:string,userId:string){ return prisma.user.upsert({where:{guildId_userId:{guildId,userId}},create:{guildId,userId,level:{create:{guildId}},economy:{create:{}}},update:{}}); }
