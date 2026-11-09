@@ -1,5 +1,8 @@
 import 'dotenv/config';
 import { z } from 'zod';
+import { requireDatabaseUrl } from './database-url.js';
+
+const databaseUrl = requireDatabaseUrl();
 
 const booleanFromEnv = z.preprocess((value) => {
   if (typeof value !== 'string') return value;
@@ -23,7 +26,7 @@ const envSchema = z.object({
   API_KEY: z.string().optional(),
 });
 
-const result = envSchema.safeParse(process.env);
+const result = envSchema.safeParse({ ...process.env, DATABASE_URL: databaseUrl });
 
 if (!result.success) {
   const issues = result.error.issues

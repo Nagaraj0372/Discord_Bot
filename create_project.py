@@ -54,7 +54,7 @@ files = {
 DISCORD_TOKEN=
 CLIENT_ID=
 GUILD_ID=
-DATABASE_URL=postgresql://gokul:gokul@localhost:5432/gokul
+DATABASE_URL=
 LAVALINK_HOST=lavalink
 LAVALINK_PORT=2333
 LAVALINK_PASSWORD=youshallnotpass
@@ -78,7 +78,12 @@ dist
 .env
 .git
 ''',
-'Dockerfile': r'''FROM node:22-bookworm-slim AS build
+'Dockerfile': r'''FROM node:22-bookworm-slim AS base
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates openssl \
+    && rm -rf /var/lib/apt/lists/*
+
+FROM base AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -86,7 +91,7 @@ COPY tsconfig.json prisma ./
 COPY src ./src
 RUN npx prisma generate && npm run build
 
-FROM node:22-bookworm-slim
+FROM base
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package*.json ./
@@ -96,7 +101,7 @@ COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma/client ./node_modules/@prisma/client
 COPY prisma ./prisma
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+CMD ["sh", "-c", "if [ -z \"${DATABASE_URL:-}\" ]; then echo 'DATABASE_URL is missing.' >&2; echo 'Configure the Railway PostgreSQL connection reference in the bot service.' >&2; exit 1; fi; npx prisma migrate deploy && node dist/index.js"]
 ''',
 'docker-compose.yml': r'''services:
   postgres:

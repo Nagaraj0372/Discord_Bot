@@ -67,7 +67,21 @@ npm test
 
 ## Railway deployment
 
-Deploy this repository as a Docker service and add a PostgreSQL service to the same Railway project/environment. The included `railway.json` selects the Dockerfile and configures a single replica. The container runs `prisma migrate deploy` before `npm start`; it does not run development migrations.
+Deploy this repository as a Docker service and add a Railway PostgreSQL service to the same project and environment. The included `railway.json` selects the Dockerfile and configures a single replica. At startup, the container validates `DATABASE_URL` as a PostgreSQL URL before running `prisma migrate deploy` with the runtime environment; it does not run development migrations.
+
+### Configure the PostgreSQL service and bot reference
+
+1. In Railway, open the `Postgres` service and confirm it is healthy and belongs to the same project and environment as `Discord Bot`.
+2. In `Postgres` → **Variables**, verify its generated `DATABASE_URL` is present and nonempty. Check **Connect** for Railway's connection information and inspect the service's deployment logs if the generated value is empty.
+3. If `Postgres.DATABASE_URL` is empty, the bot reference will also resolve to an empty value. Repair the source PostgreSQL service/configuration first; do not enter a guessed URL, reset the database, or delete/recreate its volume. For a self-managed PostgreSQL service, use its actual connection details and Railway's supported connection-variable setup. Any credentials placed in a URL must be URL-encoded.
+4. In `Discord Bot` → **Variables**, remove an empty/stale `DATABASE_URL` and add a variable reference using Railway's picker: `DATABASE_URL` → `Postgres` → `DATABASE_URL`. The resulting reference is `${{Postgres.DATABASE_URL}}`; it is a reference, not a literal connection URL.
+5. Set `NODE_ENV=production`, save the variables, then redeploy `Discord Bot`. Review deployment logs for the startup validation and migration result. Do not copy credentials or the full connection URL into logs or support messages.
+
+### Troubleshooting database startup
+
+- **P1012 / “nonempty URL” / empty `DATABASE_URL`:** confirm the bot's variable reference points to `Postgres.DATABASE_URL`, then confirm the source variable itself is populated. A reference cannot repair an empty source variable.
+- **P1001 / “Can't reach database server”:** confirm PostgreSQL is healthy, both services are in the same Railway project/environment, and the connection uses Railway's private/internal address rather than `localhost`. `localhost` inside the bot container refers to the bot container itself.
+- If Railway's PostgreSQL service does not provide a populated generated URL, use its **Connect** information and service configuration to restore the supported generated connection variables. Do not invent credentials or assemble a URL from guessed values.
 
 Set these variables on the bot service:
 
@@ -75,7 +89,7 @@ Set these variables on the bot service:
 | --- | --- |
 | `DISCORD_TOKEN` | Secret from the Discord Developer Portal |
 | `CLIENT_ID` | Discord application ID |
-| `DATABASE_URL` | Railway PostgreSQL connection string/reference |
+| `DATABASE_URL` | Reference to the populated `Postgres.DATABASE_URL` |
 | `LAVALINK_HOST` | `lavalink.railway.internal` when Lavalink is in the same Railway project and environment |
 | `LAVALINK_PORT` | `2333` |
 | `LAVALINK_PASSWORD` | Same secret as `LAVALINK_SERVER_PASSWORD` on Lavalink |
