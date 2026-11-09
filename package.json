@@ -5,7 +5,7 @@
   "description": "Production-ready all-in-one Discord bot for gaming, coding, cybersecurity and community servers.",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -40,7 +40,7 @@
     "eslint": "^9.38.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^5.1.0"
   },
   "allowScripts": {
     "@prisma/client@6.19.3": true,

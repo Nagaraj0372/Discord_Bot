@@ -27,7 +27,7 @@ Message XP is awarded with a per-user cooldown. Daily and work rewards use atomi
 
 ## Local development
 
-Requirements: Node.js 22+, npm, PostgreSQL, and a Lavalink v4 node.
+Requirements: Node.js 22.12+, npm, PostgreSQL, and a Lavalink v4 node.
 
 ```powershell
 Copy-Item .env.example .env
